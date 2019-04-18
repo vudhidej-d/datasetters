@@ -1,14 +1,13 @@
 {
-  "main.css": "/datasetters/static/css/main.dda532b0.chunk.css",
-  "main.js": "/datasetters/static/js/main.a245d7a2.chunk.js",
-  "main.js.map": "/datasetters/static/js/main.a245d7a2.chunk.js.map",
+  "main.css": "/datasetters/static/css/main.1f7af89c.chunk.css",
+  "main.js": "/datasetters/static/js/main.f5af4a0e.chunk.js",
+  "main.js.map": "/datasetters/static/js/main.f5af4a0e.chunk.js.map",
   "runtime~main.js": "/datasetters/static/js/runtime~main.ea4e75fe.js",
   "runtime~main.js.map": "/datasetters/static/js/runtime~main.ea4e75fe.js.map",
-  "static/js/2.6efc73d3.chunk.js": "/datasetters/static/js/2.6efc73d3.chunk.js",
-  "static/js/2.6efc73d3.chunk.js.map": "/datasetters/static/js/2.6efc73d3.chunk.js.map",
+  "static/js/2.f95e03e6.chunk.js": "/datasetters/static/js/2.f95e03e6.chunk.js",
+  "static/js/2.f95e03e6.chunk.js.map": "/datasetters/static/js/2.f95e03e6.chunk.js.map",
   "index.html": "/datasetters/index.html",
-  "precache-manifest.62842c3c90e8e7c7c85a816501b30920.js": "/datasetters/precache-manifest.62842c3c90e8e7c7c85a816501b30920.js",
+  "precache-manifest.107d5467aefb6c2a1f62c51ecfed6a35.js": "/datasetters/precache-manifest.107d5467aefb6c2a1f62c51ecfed6a35.js",
   "service-worker.js": "/datasetters/service-worker.js",
-  "static/css/main.dda532b0.chunk.css.map": "/datasetters/static/css/main.dda532b0.chunk.css.map",
-  "static/media/logo.svg": "/datasetters/static/media/logo.5d5d9eef.svg"
+  "static/css/main.1f7af89c.chunk.css.map": "/datasetters/static/css/main.1f7af89c.chunk.css.map"
 }
