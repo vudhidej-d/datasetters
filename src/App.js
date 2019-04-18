@@ -20,20 +20,22 @@ class App extends Component {
     firebase.initializeApp(config)
     this.db = firebase.firestore()
     this.state = {
-      dataset: []
+      dataset: [],
+      loading: true,
     }
   }
 
   componentDidMount() {
     this.db.collection('dataset').onSnapshot((querySnapshot) => {
+      this.setState({ loading: true })
       const dataset = []
       querySnapshot.forEach((doc) => { dataset.push(doc.data()) })
-      this.setState({ dataset })
+      this.setState({ dataset, loading: false })
     })
   }
 
   render() {
-    const { dataset } = this.state
+    const { dataset, loading } = this.state
     const dataSource = dataset.map((data, index) => ({
       ...data,
       key: index
@@ -44,7 +46,7 @@ class App extends Component {
         <TabPane tab={<span><Icon type="database" />Data Table</span>} key="1">
           <div style={{ padding: '20px 30px' }}>
             <h1>Dataset</h1>
-            <DataTable dataSource={dataSource} />
+            <DataTable dataSource={dataSource} loading={loading} />
           </div>
         </TabPane>
         <TabPane tab={<span><Icon type="file-add" />Add Data</span>} key="2">

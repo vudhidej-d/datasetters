@@ -36,9 +36,9 @@ const columns = [{
   key: 'answer',
 }];
 
-const DataTable = ({ dataSource }) => {
+const DataTable = ({ dataSource, loading }) => {
   return (
-    <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 8 }}/>
+    <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 8 }} loading={loading} />
   )
 }
 
