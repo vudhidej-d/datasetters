@@ -32,7 +32,6 @@ class App extends Component {
     const { dataset } = this.state
     return (
       <div className="App">
-        {dataset.map((data) => JSON.stringify(data))}
         <div style={{ padding: 50 }}>
           <DataCreateForm />
         </div>
