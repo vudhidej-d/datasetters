@@ -25,7 +25,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.db.collection('dataset').get().then((querySnapshot) => {
+    this.db.collection('dataset').onSnapshot((querySnapshot) => {
       const dataset = []
       querySnapshot.forEach((doc) => { dataset.push(doc.data()) })
       this.setState({ dataset })
@@ -34,13 +34,17 @@ class App extends Component {
 
   render() {
     const { dataset } = this.state
+    const dataSource = dataset.map((data, index) => ({
+      ...data,
+      key: index
+    }))
     return (
       <div className="App">
       <Tabs defaultActiveKey="1">
         <TabPane tab={<span><Icon type="database" />Data Table</span>} key="1">
           <div style={{ padding: '20px 30px' }}>
             <h1>Dataset</h1>
-            <DataTable dataSource={dataset} />
+            <DataTable dataSource={dataSource} />
           </div>
         </TabPane>
         <TabPane tab={<span><Icon type="file-add" />Add Data</span>} key="2">
