@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import firebase from 'firebase';
+import React, { Component } from 'react'
+import firebase from 'firebase'
+import DataCreateForm from './DataCreateForm'
 
 class App extends Component {
   constructor(props) {
@@ -23,7 +24,6 @@ class App extends Component {
     this.db.collection('dataset').get().then((querySnapshot) => {
       const dataset = []
       querySnapshot.forEach((doc) => { dataset.push(doc.data()) })
-      // console.log(dataset)
       this.setState({ dataset })
     })
   }
@@ -33,9 +33,12 @@ class App extends Component {
     return (
       <div className="App">
         {dataset.map((data) => JSON.stringify(data))}
+        <div style={{ padding: 50 }}>
+          <DataCreateForm />
+        </div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
