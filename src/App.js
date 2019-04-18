@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
+import { Tabs, Icon } from 'antd'
 import DataCreateForm from './DataCreateForm'
+import DataTable from './DataTable'
+
+const { TabPane } = Tabs
 
 class App extends Component {
   constructor(props) {
@@ -29,13 +33,23 @@ class App extends Component {
   }
 
   render() {
-    // const { dataset } = this.state
+    const { dataset } = this.state
     return (
       <div className="App">
-        {/* {dataset.map((data) => JSON.stringify(data))} */}
-        <div style={{ padding: 50 }}>
-          <DataCreateForm />
-        </div>
+      <Tabs defaultActiveKey="1">
+        <TabPane tab={<span><Icon type="database" />Data Table</span>} key="1">
+          <div style={{ padding: '20px 30px' }}>
+            <h1>Dataset</h1>
+            <DataTable dataSource={dataset} />
+          </div>
+        </TabPane>
+        <TabPane tab={<span><Icon type="file-add" />Add Data</span>} key="2">
+          <div style={{ padding: '20px 100px' }}>
+            <h1>Add Data</h1>
+            <DataCreateForm db={this.db} />
+          </div>
+        </TabPane>
+      </Tabs>
       </div>
     )
   }
