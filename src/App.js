@@ -29,9 +29,10 @@ class App extends Component {
   }
 
   render() {
-    const { dataset } = this.state
+    // const { dataset } = this.state
     return (
       <div className="App">
+        {/* {dataset.map((data) => JSON.stringify(data))} */}
         <div style={{ padding: 50 }}>
           <DataCreateForm />
         </div>
