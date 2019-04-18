@@ -1,25 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import firebase from 'firebase';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    const config = {
+      apiKey: "AIzaSyAeaMv3Y2fp877wzX187ZjT5-7AwxZkU0Y",
+      authDomain: "datasetters.firebaseapp.com",
+      databaseURL: "https://datasetters.firebaseio.com",
+      projectId: "datasetters",
+      storageBucket: "datasetters.appspot.com",
+      messagingSenderId: "340269058452"
+    }
+    firebase.initializeApp(config)
+    this.db = firebase.firestore()
+    this.state = {
+      dataset: []
+    }
+  }
+
+  componentDidMount() {
+    this.db.collection('dataset').get().then((querySnapshot) => {
+      const dataset = []
+      querySnapshot.forEach((doc) => { dataset.push(doc.data()) })
+      // console.log(dataset)
+      this.setState({ dataset })
+    })
+  }
+
   render() {
+    const { dataset } = this.state
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {dataset.map((data) => JSON.stringify(data))}
       </div>
     );
   }
