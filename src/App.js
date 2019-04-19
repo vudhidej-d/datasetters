@@ -3,6 +3,7 @@ import firebase from 'firebase'
 import { Tabs, Icon, Button } from 'antd'
 import DataCreateForm from './DataCreateForm'
 import DataTable from './DataTable'
+import DataDistribution from './DataDistribution'
 import { saveFile, jsonToCSV } from './shared'
 
 const { TabPane } = Tabs
@@ -66,10 +67,6 @@ class App extends Component {
       saveFile(data, contentType, fileName, ext)
 
     }
-
-    
-
-
     downloading[type] = false
     this.setState({downloading})
   }
@@ -97,6 +94,12 @@ class App extends Component {
           <div style={{ padding: '20px 100px' }}>
             <h1>Add Data</h1>
             <DataCreateForm db={this.db} />
+          </div>
+        </TabPane>
+        <TabPane tab={<span><Icon type="bar-chart" />Data Distribution</span>} key="3">
+          <div style={{ padding: '20px 100px' }}>
+            <h1>Data Distribution</h1>
+            <DataDistribution dataset={dataset} />
           </div>
         </TabPane>
       </Tabs>
