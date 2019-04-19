@@ -49,39 +49,6 @@ class App extends Component {
     this.setState({downloading})
     if (type === 'json') {
 
-      let nested = dataset.reduce((acc, cur, i) => {
-
-        if (acc[i]) {
-          acc[i] = {
-            id: cur.categoryId,
-            name: cur.category,
-            articles: [
-              {
-                id: cur.articleId,
-                name: cur.article,
-                paragraphs: [
-                  {
-                    text: cur.paragraph,
-                    wh_id: cur.whId,
-                    wh: cur.wh,
-                    question: cur.question,
-                    answer: cur.answer
-                  }
-                ]
-              }
-            ]
-          }
-        }
-
-        
-
-
-        return acc
-      }, {})
-
-
-
-
       let data = JSON.stringify(dataset)
       console.log(data)
       const fileName = "dataset";
