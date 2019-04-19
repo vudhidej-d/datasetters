@@ -12,3 +12,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.download-btn {
+  margin: 0px 10px;
+  float: right;
+}
+.download-btn.json-btn, .download-btn.json-btn:visited {
+  background-color: #13c2c2;
+  border-color: #13c2c2;
+  color: #fff;
+}
+.download-btn.json-btn:hover, .download-btn.json-btn:focus {
+  background-color: #36cfc9;
+  border-color: #36cfc9;
+  color: #fff;
+}
+.download-btn.csv-btn, .download-btn.csv-btn:visited {
+  background-color: #fa8c16;
+  border-color: #fa8c16;
+  color: #fff;
+}
+.download-btn.csv-btn:hover, .download-btn.csv-btn:focus {
+  background-color: #ffa940;
+  border-color: #ffa940;
+  color: #fff;
+}

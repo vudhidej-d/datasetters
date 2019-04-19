@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
-import { Tabs, Icon } from 'antd'
+import { Tabs, Icon, Button } from 'antd'
 import DataCreateForm from './DataCreateForm'
 import DataTable from './DataTable'
+import { saveFile, jsonToCSV } from './shared'
 
 const { TabPane } = Tabs
 
@@ -22,6 +23,10 @@ class App extends Component {
     this.state = {
       dataset: [],
       loading: true,
+      downloading: {
+        json: false,
+        csv: false
+      }
     }
   }
 
@@ -34,8 +39,76 @@ class App extends Component {
     })
   }
 
+  
+
+  handleDownload(type) {
+    const { downloading, dataset } = this.state
+    const isDownloading = downloading[type]
+    if (isDownloading) return
+    downloading[type] = true
+    this.setState({downloading})
+    if (type === 'json') {
+
+      let nested = dataset.reduce((acc, cur, i) => {
+
+        if (acc[i]) {
+          acc[i] = {
+            id: cur.categoryId,
+            name: cur.category,
+            articles: [
+              {
+                id: cur.articleId,
+                name: cur.article,
+                paragraphs: [
+                  {
+                    text: cur.paragraph,
+                    wh_id: cur.whId,
+                    wh: cur.wh,
+                    question: cur.question,
+                    answer: cur.answer
+                  }
+                ]
+              }
+            ]
+          }
+        }
+
+        
+
+
+        return acc
+      }, {})
+
+
+
+
+      let data = JSON.stringify(dataset)
+      console.log(data)
+      const fileName = "dataset";
+      const ext = "json"
+      const contentType = "application/json;charset=utf-8;";
+      saveFile(data, contentType, fileName, ext)
+
+    } else if (type === 'csv') {
+
+      let data = jsonToCSV(dataset, true)
+      console.log(data)
+      const fileName = "dataset";
+      const ext = "csv"
+      const contentType = "text/csv;charset=utf-8;";
+      saveFile(data, contentType, fileName, ext)
+
+    }
+
+    
+
+
+    downloading[type] = false
+    this.setState({downloading})
+  }
+
   render() {
-    const { dataset, loading } = this.state
+    const { dataset, loading, downloading } = this.state
     const dataSource = dataset.map((data, index) => ({
       ...data,
       key: index
@@ -45,7 +118,11 @@ class App extends Component {
       <Tabs defaultActiveKey="1">
         <TabPane tab={<span><Icon type="database" />Data Table</span>} key="1">
           <div style={{ padding: '20px 30px' }}>
-            <h1>Dataset</h1>
+            <h1>
+              Dataset
+              <Button type="primary" shape="round" icon="download" size="large" className="download-btn json-btn" onClick={(e) => this.handleDownload('json')} loading={downloading['json']}>JSON</Button>
+              <Button type="primary" shape="round" icon="download" size="large" className="download-btn csv-btn" onClick={(e) => this.handleDownload('csv')} loading={downloading['csv']}>CSV</Button>
+            </h1>
             <DataTable dataSource={dataSource} loading={loading} />
           </div>
         </TabPane>
