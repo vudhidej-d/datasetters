@@ -6,14 +6,29 @@ import { whWords, categories } from "./shared";
 const { TabPane } = Tabs
 
 const ProgressTab = (props) => {
-    const { values } = props
+    const { values, numbers } = props
     return (
           <div style={{ padding: '20px 30px' }}>
-            <div>{whWords[0]}: <Progress percent={values[0]} /></div>
-            <div>{whWords[1]}: <Progress percent={values[1]} /></div>
-            <div>{whWords[2]}: <Progress percent={values[2]} /></div>
-            <div>{whWords[3]}: <Progress percent={values[3]} /></div>
-            <div>{whWords[4]}: <Progress percent={values[4]} /></div>
+            <div>
+                {whWords[0]}: ({`${numbers[0]}`})
+                <Progress percent={values[0]} status={'active'} format={percent => `${percent.toFixed(2)} %`} />
+            </div>
+            <div>
+                {whWords[1]}: ({`${numbers[1]}`}) 
+                <Progress percent={values[1]} status={'active'} format={percent => `${percent.toFixed(2)} %`} />
+                </div>
+            <div>
+                {whWords[2]}: ({`${numbers[2]}`}) 
+                <Progress percent={values[2]} status={'active'} format={percent => `${percent.toFixed(2)} %`} />
+                </div>
+            <div>
+                {whWords[3]}: ({`${numbers[3]}`}) 
+                <Progress percent={values[3]} status={'active'} format={percent => `${percent.toFixed(2)} %`} />
+                </div>
+            <div>
+                {whWords[4]}: ({`${numbers[4]}`}) 
+                <Progress percent={values[4]} status={'active'} format={percent => `${percent.toFixed(2)} %`} />
+                </div>
           </div>
     )
 }
@@ -21,41 +36,43 @@ const ProgressTab = (props) => {
 const DataDistribution = (props) => {
 
     const {dataset} = props
-
+    
     const whNum = dataset.reduce((acc, cur, i) => {
-        if (!acc[cur.categoryId]) {
-            acc[cur.categoryId] = [0, 0, 0, 0, 0]
+        if (!acc[cur.categoryId+1]) {
+            acc[cur.categoryId+1] = [0, 0, 0, 0, 0]
         }
-        acc[cur.categoryId][cur.whId] = acc[cur.categoryId][cur.whId] + 1
-        console.log(i+": "+acc+ "_" + cur.whId)
+        acc[cur.categoryId+1][cur.whId] = acc[cur.categoryId+1][cur.whId] + 1
         return acc
     }, {})
 
-    whNum['all'] = Object.keys(whNum).reduce((acc, cur, i) => {
+    whNum[0] = Object.keys(whNum).reduce((acc, cur, i) => {
         for (let index = 0; index < 5; index++) {
             acc[index] = acc[index] + whNum[cur][index]
         }
         return acc
     }, [0, 0, 0, 0, 0])
-    console.log(whNum)
+    
     const progressTab = Object.keys(whNum).map((key, i) => {
         let values = whNum[key]
         const sumV = values.reduce((p, c, i) => {
             return p + c
         }, 0)
         values = values.map(v => v/sumV*100)
-        let name = key
-        if (key !== 'all') {
-            name = categories[key]
+        let name = "No Name"
+        if (key === '0') {
+            name = 'All'
+        } else {
+            name = categories[key-1]
         }
+        
         return (
             <TabPane tab={<span>{name}</span>} key={i}>
-                <ProgressTab values={values} />
+                <ProgressTab values={values} numbers={whNum[key]} />
             </TabPane>
         )
     })
     return (
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="0">
             {progressTab}
         </Tabs>
     )
