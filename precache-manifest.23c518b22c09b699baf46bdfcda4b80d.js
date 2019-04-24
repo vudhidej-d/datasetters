@@ -4,15 +4,15 @@ self.__precacheManifest = [
     "url": "/datasetters/static/js/runtime~main.ea4e75fe.js"
   },
   {
-    "revision": "83db4b123337795311c0",
-    "url": "/datasetters/static/js/main.fdb4df4b.chunk.js"
+    "revision": "270021c042c56ab1b273",
+    "url": "/datasetters/static/js/main.6647da50.chunk.js"
   },
   {
     "revision": "c30c56154106da7ae8ef",
     "url": "/datasetters/static/js/2.d36e1b2d.chunk.js"
   },
   {
-    "revision": "83db4b123337795311c0",
+    "revision": "270021c042c56ab1b273",
     "url": "/datasetters/static/css/main.5409551c.chunk.css"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/datasetters/static/css/2.d0495348.chunk.css"
   },
   {
-    "revision": "40f30ed1a7dd8d7cdf27d636e243f182",
+    "revision": "cf982cada6dbe06a82e5af1c622247ab",
     "url": "/datasetters/index.html"
   }
 ];
