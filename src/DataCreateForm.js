@@ -42,6 +42,12 @@ const DataCreateForm = (props) => {
     })
   }
 
+  const resizeTextarea = e => {
+    const textarea = e.target
+    textarea.style.height = ""
+    textarea.style.height = Math.min(textarea.scrollHeight, 100) + "px"
+  }
+
   return (
     <Form>
       <FormItem label="Article ID">
@@ -65,7 +71,7 @@ const DataCreateForm = (props) => {
       <FormItem label="Paragraph">
         {getFieldDecorator('paragraph', {
           rules: [{ required: true }],
-        })(<TextArea />)}
+        })(<TextArea onInput={resizeTextarea} />)}
       </FormItem>
       <FormItem label="WH Word">
         {getFieldDecorator('wh', {
