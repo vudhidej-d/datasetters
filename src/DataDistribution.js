@@ -64,6 +64,8 @@ const DataDistribution = (props) => {
         } else {
             name = categories[key-1]
         }
+
+        name = `${name} (${sumV})`
         
         return (
             <TabPane tab={<span>{name}</span>} key={i}>
