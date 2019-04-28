@@ -43,6 +43,7 @@ const DataCreateForm = (props) => {
     })
   }
 
+  // Incomplete - onParagraphBlur
   const onParagraphBlur = ({ target: { value } }) => {
     axios.get(`https://py-thai-tokenizer.herokuapp.com/icu/${value}`, {
       headers: {
