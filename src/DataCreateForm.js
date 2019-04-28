@@ -44,7 +44,7 @@ const DataCreateForm = (props) => {
   }
 
   const onParagraphBlur = ({ target: { value } }) => {
-    axios.get(`http://py-thai-tokenizer.herokuapp.com/icu/${value}`, {
+    axios.get(`https://py-thai-tokenizer.herokuapp.com/icu/${value}`, {
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
