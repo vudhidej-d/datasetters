@@ -35,7 +35,12 @@ class App extends Component {
     this.db.collection('dataset').onSnapshot((querySnapshot) => {
       this.setState({ loading: true })
       const dataset = []
-      querySnapshot.forEach((doc) => { dataset.push(doc.data()) })
+      querySnapshot.forEach((doc) => {
+        dataset.push({
+          ...doc.data(),
+          id: doc.id,
+        })
+      })
       this.setState({ dataset, loading: false })
     })
   }
@@ -87,7 +92,7 @@ class App extends Component {
               <Button type="primary" shape="round" icon="download" size="large" className="download-btn json-btn" onClick={(e) => this.handleDownload('json')} loading={downloading['json']}>JSON</Button>
               <Button type="primary" shape="round" icon="download" size="large" className="download-btn csv-btn" onClick={(e) => this.handleDownload('csv')} loading={downloading['csv']}>CSV</Button>
             </h1>
-            <DataTable dataSource={dataSource} loading={loading} />
+            <DataTable dataSource={dataSource} loading={loading} db={this.db} />
           </div>
         </TabPane>
         <TabPane tab={<span><Icon type="file-add" />Add Data</span>} key="2">
