@@ -86,7 +86,7 @@ const DataTable = ({ dataSource, loading, db }) => {
         pagination={{ pageSize: 8 }}
         loading={loading}
         onRow={(record) => ({
-          onClick: () => {
+          onDoubleClick: () => {
             setData(record)
             setModalVisible(true)
           }
