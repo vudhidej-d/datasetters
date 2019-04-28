@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Select, Input, Button, notification } from 'antd'
+import axios from 'axios'
 import { categories, whWords } from './shared'
 
 const { Option } = Select
@@ -42,6 +43,16 @@ const DataCreateForm = (props) => {
     })
   }
 
+  const onParagraphBlur = ({ target: { value } }) => {
+    axios.get(`http://py-thai-tokenizer.herokuapp.com/icu/${value}`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    }).then((res) => {
+      console.log(res)
+    }).catch((err) => { console.error(err) })
+  }
+
   const resizeTextarea = e => {
     const textarea = e.target
     textarea.style.height = ""
@@ -71,7 +82,7 @@ const DataCreateForm = (props) => {
       <FormItem label="Paragraph">
         {getFieldDecorator('paragraph', {
           rules: [{ required: true }],
-        })(<TextArea onInput={resizeTextarea} />)}
+        })(<TextArea onInput={resizeTextarea} onBlur={onParagraphBlur} />)}
       </FormItem>
       <FormItem label="WH Word">
         {getFieldDecorator('wh', {
