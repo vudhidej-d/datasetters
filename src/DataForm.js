@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Form, Select, Input, Button, notification } from 'antd'
 import axios from 'axios'
-import { get } from 'lodash'
+import { get, omit } from 'lodash'
 import { categories, whWords } from './shared'
 import Spin from './Spin'
 
@@ -9,10 +9,12 @@ const { Option } = Select
 const { Item: FormItem } = Form
 const { TextArea } = Input
 
-const DataCreateForm = (props) => {
+const DataForm = (props) => {
   const {
     form: { getFieldDecorator },
     db,
+    mode,
+    closeModal,
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -20,16 +22,16 @@ const DataCreateForm = (props) => {
   const [questionLoading, setQuestionLoading] = useState(false)
   const [answerLoading, setAnswerLoading] = useState(false)
 
-  const handleSubmit = (e) => {
-    const { form: { validateFields } } = props
+  const handleCreate = (e) => {
+    const { form: { validateFieldsAndScroll } } = props
     e.preventDefault()
-    validateFields(async (err, values) => {
+    validateFieldsAndScroll(async (err, values) => {
       if (err) return
       const categoryId = categories.findIndex((category) => category === values.category)
       const whId = whWords.findIndex((whWord) => whWord === values.wh)
       try {
         setLoading(true)
-        await db.collection("dataset").add({
+        await db.collection('dataset').add({
           ...values,
           categoryId,
           whId,
@@ -44,6 +46,38 @@ const DataCreateForm = (props) => {
         });
       } finally {
         setLoading(false)
+      }
+    })
+  }
+
+  const handleEdit = (e) => {
+    const { form: { validateFieldsAndScroll } } = props
+    e.preventDefault()
+    validateFieldsAndScroll(async (err, values) => {
+      if (err) return
+      const categoryId = categories.findIndex((category) => category === values.category)
+      const whId = whWords.findIndex((whWord) => whWord === values.wh)
+      const { id } = values
+      const data = omit(values, 'id')
+      try {
+        setLoading(true)
+        const dataRef = db.collection('dataset').doc(id)
+        await dataRef.update({
+          ...data,
+          categoryId,
+          whId,
+        })
+        notification['success']({
+          message: 'Data edited successfully.',
+        });
+      } catch (e) {
+        console.error(e)
+        notification['error']({
+          message: 'Something went wrong, please try again.',
+        });
+      } finally {
+        setLoading(false)
+        closeModal()
       }
     })
   }
@@ -74,6 +108,8 @@ const DataCreateForm = (props) => {
     textarea.style.height = ""
     textarea.style.height = Math.min(textarea.scrollHeight, 100) + "px"
   }
+
+  getFieldDecorator('id')
 
   return (
     <Form>
@@ -133,20 +169,34 @@ const DataCreateForm = (props) => {
           rules: [{ required: true }],
         })(<Input disabled />)}
       </FormItem>
-      <FormItem style={{ textAlign: 'center' }}>
+      {mode === 'create' && <FormItem style={{ textAlign: 'center' }}>
         <Button
-          onClick={handleSubmit}
+          onClick={handleCreate}
           style={{ width: 100, height: 40 }}
           type="primary"
           loading={loading}
         >Add</Button>
-      </FormItem>
+      </FormItem>}
+      {mode === 'edit' && <FormItem style={{ textAlign: 'center' }}>
+        <Button
+          onClick={handleEdit}
+          style={{ width: 100, height: 40 }}
+          type="primary"
+          loading={loading}
+        >Edit</Button>
+      </FormItem>}
     </Form>
   )
 }
 
+DataForm.defaultProps = {
+  mode: 'create',
+  closeModal: () => {},
+}
+
 export default Form.create({
   mapPropsToFields: ({ data }) => ({
+    id: Form.createFormField({ value: get(data, 'id', '') }),
     articleId: Form.createFormField({ value: get(data, 'articleId', '') }),
     article: Form.createFormField({ value: get(data, 'article', '')}),
     category: Form.createFormField({ value: get(data, 'category', 'Science')}),
@@ -158,4 +208,4 @@ export default Form.create({
     answer: Form.createFormField({ value: get(data, 'answer', '') }),
     answerTokens: Form.createFormField({ value: get(data, 'answerTokens', '') }),
   })
-})(DataCreateForm)
+})(DataForm)

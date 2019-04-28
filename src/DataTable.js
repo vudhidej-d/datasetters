@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Table, Button, Modal, notification } from 'antd'
 import { categories, whWords } from './shared'
+import DataForm from './DataForm'
 
 const confirm = Modal.confirm
 
 const DataTable = ({ dataSource, loading, db }) => {
+  const [modalVisible, setModalVisible] = useState(false)
+  const [data, setData] = useState({})
+
   const confirmDelete = (id) => () => {
     confirm({
       title: 'Do you want to delete these data?',
@@ -65,7 +69,30 @@ const DataTable = ({ dataSource, loading, db }) => {
   }];
 
   return (
-    <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 8 }} loading={loading} />
+    <div>
+      <Modal
+        destroyOnClose
+        centered
+        bodyStyle={{ maxHeight: 650, overflowY: 'scroll' }}
+        visible={modalVisible}
+        footer={null}
+        onCancel={() => { setModalVisible(false) }}
+      >
+        <DataForm db={db} mode="edit" data={data} closeModal={() => { setModalVisible(false) }} />
+      </Modal>
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={{ pageSize: 8 }}
+        loading={loading}
+        onRow={(record) => ({
+          onClick: () => {
+            setData(record)
+            setModalVisible(true)
+          }
+        })}
+      />
+    </div>
   )
 }
 
