@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Form, Select, Input, Button, notification } from 'antd'
 import axios from 'axios'
 import { categories, whWords } from './shared'
+import Spin from './Spin'
 
 const { Option } = Select
 const { Item: FormItem } = Form
@@ -14,6 +15,9 @@ const DataCreateForm = (props) => {
   } = props
 
   const [loading, setLoading] = useState(false)
+  const [paragraphLoading, setParagraphLoading] = useState(false)
+  const [questionLoading, setQuestionLoading] = useState(false)
+  const [answerLoading, setAnswerLoading] = useState(false)
 
   const handleSubmit = (e) => {
     const { form: { validateFields } } = props
@@ -43,15 +47,25 @@ const DataCreateForm = (props) => {
     })
   }
 
-  // Incomplete - onParagraphBlur
-  const onParagraphBlur = ({ target: { value } }) => {
-    axios.get(`https://py-thai-tokenizer.herokuapp.com/icu/${value}`, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    }).then((res) => {
-      console.log(res)
-    }).catch((err) => { console.error(err) })
+  const onBlur = (fieldName, setLoading) => async ({ target: { value } }) => {
+    if (!value) return
+    try {
+      const { form: { setFieldsValue, getFieldValue } } = props
+      const prevValue = getFieldValue(fieldName) || ''
+      if (prevValue.split(',').join('') === value) return
+      setLoading(true)
+      const res = await axios.get(`https://py-thai-tokenizer.herokuapp.com/icu/${value}`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+      const { data: { tokens } } = res
+      setFieldsValue({ [fieldName]: tokens })
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const resizeTextarea = e => {
@@ -62,17 +76,17 @@ const DataCreateForm = (props) => {
 
   return (
     <Form>
-      <FormItem label="Article ID">
+      <FormItem colon={false} label="Article ID">
         {getFieldDecorator('articleId', {
           rules: [{ required: true }],
         })(<Input />)}
       </FormItem>
-      <FormItem label="Article">
+      <FormItem colon={false} label="Article">
         {getFieldDecorator('article', {
           rules: [{ required: true }],
         })(<Input />)}
       </FormItem>
-      <FormItem label="Category">
+      <FormItem colon={false} label="Category">
         {getFieldDecorator('category', {
           initialValue: 'Science',
           rules: [{ required: true }],
@@ -80,12 +94,17 @@ const DataCreateForm = (props) => {
           {categories.map((category, index) => <Option value={category} key={index}>{category}</Option>)}
         </Select>)}
       </FormItem>
-      <FormItem label="Paragraph">
+      <FormItem colon={false} label="Paragraph">
         {getFieldDecorator('paragraph', {
           rules: [{ required: true }],
-        })(<TextArea onInput={resizeTextarea} onBlur={onParagraphBlur} />)}
+        })(<TextArea onInput={resizeTextarea} onBlur={onBlur('paragraphTokens', setParagraphLoading)} />)}
       </FormItem>
-      <FormItem label="WH Word">
+      <FormItem colon={false} label={<span>Paragraph Tokens {paragraphLoading && <Spin />}</span>}>
+        {getFieldDecorator('paragraphTokens', {
+          rules: [{ required: true }],
+        })(<TextArea disabled />)}
+      </FormItem>
+      <FormItem colon={false} label="WH Word">
         {getFieldDecorator('wh', {
           initialValue: 'Who',
           rules: [{ required: true }],
@@ -93,15 +112,25 @@ const DataCreateForm = (props) => {
           {whWords.map((whWord, index) => (<Option value={whWord} key={index}>{whWord}</Option>))}
         </Select>)}
       </FormItem>
-      <FormItem label="Question">
+      <FormItem colon={false} label="Question">
         {getFieldDecorator('question', {
           rules: [{ required: true }],
-        })(<Input />)}
+        })(<Input onBlur={onBlur('questionTokens', setQuestionLoading)} />)}
       </FormItem>
-      <FormItem label="Answer">
+      <FormItem colon={false} label={<span>Question Tokens {questionLoading && <Spin />}</span>}>
+        {getFieldDecorator('questionTokens', {
+          rules: [{ required: true }],
+        })(<Input disabled />)}
+      </FormItem>
+      <FormItem colon={false} label="Answer">
         {getFieldDecorator('answer', {
           rules: [{ required: true }],
-        })(<Input />)}
+        })(<Input onBlur={onBlur('answerTokens', setAnswerLoading)} />)}
+      </FormItem>
+      <FormItem colon={false} label={<span>Answer Tokens {answerLoading && <Spin />}</span>}>
+        {getFieldDecorator('answerTokens', {
+          rules: [{ required: true }],
+        })(<Input disabled />)}
       </FormItem>
       <FormItem style={{ textAlign: 'center' }}>
         <Button
