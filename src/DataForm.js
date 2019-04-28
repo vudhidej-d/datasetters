@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Form, Select, Input, Button, notification } from 'antd'
 import axios from 'axios'
+import { get } from 'lodash'
 import { categories, whWords } from './shared'
 import Spin from './Spin'
 
@@ -144,4 +145,17 @@ const DataCreateForm = (props) => {
   )
 }
 
-export default Form.create()(DataCreateForm)
+export default Form.create({
+  mapPropsToFields: ({ data }) => ({
+    articleId: Form.createFormField({ value: get(data, 'articleId', '') }),
+    article: Form.createFormField({ value: get(data, 'article', '')}),
+    category: Form.createFormField({ value: get(data, 'category', 'Science')}),
+    paragraph: Form.createFormField({ value: get(data, 'paragraph', '')}),
+    paragraphTokens: Form.createFormField({ value: get(data, 'paragraphTokens', '')}),
+    wh: Form.createFormField({ value: get(data, 'wh', 'Who')}),
+    question: Form.createFormField({ value: get(data, 'question', '')}),
+    questionTokens: Form.createFormField({ value: get(data, 'questionTokens', '')}),
+    answer: Form.createFormField({ value: get(data, 'answer', '') }),
+    answerTokens: Form.createFormField({ value: get(data, 'answerTokens', '') }),
+  })
+})(DataCreateForm)

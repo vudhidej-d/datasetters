@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import { Tabs, Icon, Button } from 'antd'
-import DataCreateForm from './DataCreateForm'
+import DataForm from './DataForm'
 import DataTable from './DataTable'
 import DataDistribution from './DataDistribution'
 import { saveFile, jsonToCSV } from './shared'
@@ -98,7 +98,7 @@ class App extends Component {
         <TabPane tab={<span><Icon type="file-add" />Add Data</span>} key="2">
           <div style={{ padding: '20px 100px' }}>
             <h1>Add Data</h1>
-            <DataCreateForm db={this.db} />
+            <DataForm db={this.db} />
           </div>
         </TabPane>
         <TabPane tab={<span><Icon type="bar-chart" />Data Distribution</span>} key="3">
