@@ -89,7 +89,9 @@ const DataForm = (props) => {
       const prevValue = getFieldValue(fieldName) || ''
       if (prevValue.split(',').join('') === value) return
       setLoading(true)
-      const res = await axios.get(`https://py-thai-tokenizer.herokuapp.com/icu/${value}`, {
+      const res = await axios.post(`https://py-thai-tokenizer.herokuapp.com/icu`, {
+        text: value
+      }, {
         headers: {
           'Access-Control-Allow-Origin': '*',
         },
