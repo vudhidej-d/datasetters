@@ -23,9 +23,9 @@ const DataForm = (props) => {
   const [answerLoading, setAnswerLoading] = useState(false)
 
   const handleCreate = (e) => {
-    const { form: { validateFieldsAndScroll } } = props
+    const { form: { validateFields } } = props
     e.preventDefault()
-    validateFieldsAndScroll(async (err, values) => {
+    validateFields(async (err, values) => {
       if (err) return
       const categoryId = categories.findIndex((category) => category === values.category)
       const whId = whWords.findIndex((whWord) => whWord === values.wh)
