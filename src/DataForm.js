@@ -15,6 +15,7 @@ const DataForm = (props) => {
     db,
     mode,
     closeModal,
+    setTempData,
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -31,11 +32,13 @@ const DataForm = (props) => {
       const whId = whWords.findIndex((whWord) => whWord === values.wh)
       try {
         setLoading(true)
-        await db.collection('dataset').add({
+        const data = {
           ...values,
           categoryId,
           whId,
-        })
+        }
+        await db.collection('dataset').add(data)
+        setTempData(data)
         notification['success']({
           message: 'Data added successfully.',
         });

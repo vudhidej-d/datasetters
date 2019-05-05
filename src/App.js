@@ -27,7 +27,8 @@ class App extends Component {
       downloading: {
         json: false,
         csv: false
-      }
+      },
+      tempData: {},
     }
   }
 
@@ -45,7 +46,7 @@ class App extends Component {
     })
   }
 
-  
+  setTempData = (tempData) => { this.setState({ tempData }) }
 
   handleDownload(type) {
     const { downloading, dataset } = this.state
@@ -77,7 +78,7 @@ class App extends Component {
   }
 
   render() {
-    const { dataset, loading, downloading } = this.state
+    const { dataset, loading, downloading, tempData } = this.state
     const dataSource = dataset.map((data, index) => ({
       ...data,
       key: index
@@ -98,7 +99,7 @@ class App extends Component {
         <TabPane tab={<span><Icon type="file-add" />Add Data</span>} key="2">
           <div style={{ padding: '20px 100px' }}>
             <h1>Add Data</h1>
-            <DataForm db={this.db} />
+            <DataForm db={this.db} data={tempData} setTempData={this.setTempData} />
           </div>
         </TabPane>
         <TabPane tab={<span><Icon type="bar-chart" />Data Distribution</span>} key="3">
