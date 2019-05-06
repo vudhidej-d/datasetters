@@ -21,6 +21,7 @@ const DataForm = (props) => {
   const [paragraphLoading, setParagraphLoading] = useState(false)
   const [questionLoading, setQuestionLoading] = useState(false)
   const [answerLoading, setAnswerLoading] = useState(false)
+  const [articleIdLoading, setArticleIdLoading] = useState(false)
 
   const handleCreate = (e) => {
     const { form: { validateFieldsAndScroll } } = props
@@ -105,6 +106,29 @@ const DataForm = (props) => {
     }
   }
 
+  const onBlurTitle = (fieldName, setLoading) => async ({ target: { value } }) => {
+    if (!value) return
+    try {
+      const { form: { setFieldsValue, getFieldValue } } = props
+      const prevValue = getFieldValue(fieldName) || ''
+      if (prevValue.split(',').join('') === value) return
+      setLoading(true)
+      const res = await axios.post(`https://py-thai-tokenizer.herokuapp.com/wiki`, {
+        title: value
+      }, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+      const { data: { id } } = res
+      setFieldsValue({ [fieldName]: id })
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const resizeTextarea = e => {
     const textarea = e.target
     textarea.style.height = ""
@@ -115,15 +139,15 @@ const DataForm = (props) => {
 
   return (
     <Form>
-      <FormItem colon={false} label="Article ID">
+      <FormItem colon={false} label={<span>Article ID {articleIdLoading && <Spin />}</span>}>
         {getFieldDecorator('articleId', {
           rules: [{ required: true }],
-        })(<Input />)}
+        })(<Input disabled />)}
       </FormItem>
       <FormItem colon={false} label="Article">
         {getFieldDecorator('article', {
           rules: [{ required: true }],
-        })(<Input />)}
+        })(<Input onBlur={onBlurTitle('articleId', setArticleIdLoading)} />)}
       </FormItem>
       <FormItem colon={false} label="Category">
         {getFieldDecorator('category', {
