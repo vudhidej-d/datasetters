@@ -15,6 +15,7 @@ const DataForm = (props) => {
     db,
     mode,
     closeModal,
+    setTempData,
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -24,19 +25,21 @@ const DataForm = (props) => {
   const [articleIdLoading, setArticleIdLoading] = useState(false)
 
   const handleCreate = (e) => {
-    const { form: { validateFieldsAndScroll } } = props
+    const { form: { validateFields } } = props
     e.preventDefault()
-    validateFieldsAndScroll(async (err, values) => {
+    validateFields(async (err, values) => {
       if (err) return
       const categoryId = categories.findIndex((category) => category === values.category)
       const whId = whWords.findIndex((whWord) => whWord === values.wh)
       try {
         setLoading(true)
-        await db.collection('dataset').add({
+        const data = {
           ...values,
           categoryId,
           whId,
-        })
+        }
+        await db.collection('dataset').add(data)
+        setTempData(data)
         notification['success']({
           message: 'Data added successfully.',
         });
