@@ -168,7 +168,7 @@ const DataForm = (props) => {
       <FormItem colon={false} label={<span>Paragraph Tokens {paragraphLoading && <Spin />}</span>}>
         {getFieldDecorator('paragraphTokens', {
           rules: [{ required: true }],
-        })(<TextArea disabled />)}
+        })(<TextArea />)}
       </FormItem>
       <FormItem colon={false} label="WH Word">
         {getFieldDecorator('wh', {
@@ -186,7 +186,7 @@ const DataForm = (props) => {
       <FormItem colon={false} label={<span>Question Tokens {questionLoading && <Spin />}</span>}>
         {getFieldDecorator('questionTokens', {
           rules: [{ required: true }],
-        })(<Input disabled />)}
+        })(<Input />)}
       </FormItem>
       <FormItem colon={false} label="Answer">
         {getFieldDecorator('answer', {
@@ -196,7 +196,7 @@ const DataForm = (props) => {
       <FormItem colon={false} label={<span>Answer Tokens {answerLoading && <Spin />}</span>}>
         {getFieldDecorator('answerTokens', {
           rules: [{ required: true }],
-        })(<Input disabled />)}
+        })(<Input />)}
       </FormItem>
       {mode === 'create' && <FormItem style={{ textAlign: 'center' }}>
         <Button
